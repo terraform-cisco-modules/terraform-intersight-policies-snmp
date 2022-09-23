@@ -28,9 +28,11 @@ content: |-
 
   ## Environment Variables
 
-  The SNMP Module may have many more Sensitive Variables because SNMP Policies include community strings and auth and priv passwords.
+  The SNMP Module may have many more Sensitive Variables because SNMP Policies include community strings and authorization and privilege passwords.
 
-  In this example we added the snmp_auth_password_1 because that was the password assigned to the user.  
+  In this example we added the snmp_auth_password_1 because that was the password assigned to the user.  If we were to use communities or privilege passwords we would need to add variables for these as well.
+
+  Each type has an option of up to five variables for authorization passwords, privilege passwords, and trap communities.  You would add them according to your need.
   
   In the variables.tf, in the main module, you will see many other options you may need to include based on what you need to use for communities and passwords.
 
