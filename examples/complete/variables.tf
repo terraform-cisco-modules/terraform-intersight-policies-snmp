@@ -15,3 +15,10 @@ variable "secretkey" {
   sensitive   = true
   type        = string
 }
+
+variable "snmp_auth_password_1" {
+  default     = ""
+  description = "SNMPv3 User Authentication Password."
+  sensitive   = true
+  type        = string
+}
