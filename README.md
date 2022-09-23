@@ -85,9 +85,7 @@ Thus, The SNMP Module may require more Sensitive Variables because SNMP Policies
 
 If we were to use communities or privilege passwords we would need to add variables for these as well.
 
-Each type can have up to five variables for authorization passwords, privilege passwords, and trap communities.  You would add them according to your need.
-
-In the table below, you will see the variables snmp_auth_password_[1-5], snmp_privacy_password_[1-5], and snmp_trap_community_[1-5].  Include these additional variables based on what you need to use for communities and passwords.
+Each type of these sensitive variables, shown in the table below, can have up to five variables: snmp_auth_password_[1-5], snmp_privacy_password_[1-5], and snmp_trap_community_[1-5]. Add them according to your need.
 
 ### Terraform Cloud/Enterprise - Workspace Variables
 - Add variable apikey with value of [your-api-key]
