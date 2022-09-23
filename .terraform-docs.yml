@@ -36,7 +36,7 @@ content: |-
 
   Each type of these sensitive variables, shown in the table below, can have up to five variables: snmp_auth_password_[1-5], snmp_privacy_password_[1-5], and snmp_trap_community_[1-5]. Add them according to your need.
   
-    ### Terraform Cloud/Enterprise - Workspace Variables
+  ### Terraform Cloud/Enterprise - Workspace Variables
   - Add variable apikey with value of [your-api-key]
   - Add variable secretkey with value of [your-secret-file-content]
   - Add variable snmp_auth_password_1 with value of [your-auth-password]
