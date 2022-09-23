@@ -1,5 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
-# Fibre-Channel Pool Example
+# SNMP Policy Example
 
 To run this example you need to execute:
 
@@ -13,23 +13,26 @@ Note that this example will create resources. Resources can be destroyed with `t
 
 ### main.tf
 ```hcl
-module "wwpn_pool" {
-  source  = "scotttyso/pools-fc/intersight"
+module "snmp_policy" {
+  source  = "terraform-cisco-modules/policies-snmp/intersight"
   version = ">= 1.0.1"
 
-  assignment_order = "sequential"
-  description      = "Demo WWPN Pool"
-  id_blocks = [
-    {
-      from = "0:00:00:25:B5:00:00:00"
-      size = 1000
-    }
-  ]
+  description  = "default SNMP Policy."
   name         = "default"
   organization = "default"
-  pool_purpose = "WWPN"
+  snmp_trap_destinations = [
+    {
+      hostname = "198.18.1.31"
+      user     = "snmpuser"
+    }
+  ]
+  snmp_users = [
+    {
+      auth_password = 1
+      user          = "snmpuser"
+    }
+  ]
 }
-
 ```
 
 ### variables.tf
