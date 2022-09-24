@@ -59,15 +59,6 @@ data "intersight_server_profile_template" "templates" {
 # GUI Location: Policies > Create Policy > SNMP
 #__________________________________________________________________
 
-locals {
-  profiles = {
-    for v in var.profiles : v.name => {
-      name        = v.name
-      object_type = v.object_type != null ? v.object_type : "server.Profile"
-    }
-  }
-}
-
 resource "intersight_snmp_policy" "snmp" {
   depends_on = [
     data.intersight_chassis_profile.profiles,
@@ -127,11 +118,11 @@ resource "intersight_snmp_policy" "snmp" {
         regexall("5", coalesce(snmp_traps.value.community_string, 10))
       ) > 0 ? var.snmp_trap_community_5 : ""
       destination = snmp_traps.value.hostname
-      enabled     = length(compact([snmp_traps.value.enable])) > 0 ? snmp_traps.value.enable : false
-      port        = length(compact([snmp_traps.value.port])) > 0 ? snmp_traps.value.port : 162
-      type        = length(compact([snmp_traps.value.trap_type])) > 0 ? snmp_traps.value.trap_type : "Trap"
+      enabled     = snmp_traps.value.enable
+      port        = snmp_traps.value.port
+      type        = snmp_traps.value.trap_type
       nr_version  = length(compact([snmp_traps.value.user])) > 0 ? "V3" : "V2"
-      user        = length(compact([snmp_traps.value.user])) > 0 ? snmp_traps.value.user : ""
+      user        = snmp_traps.value.user
     }
   }
   dynamic "snmp_users" {
@@ -148,9 +139,8 @@ resource "intersight_snmp_policy" "snmp" {
         ) > 0 ? var.snmp_auth_password_3 : length(
         regexall("5", coalesce(snmp_users.value.auth_password, 10))
       ) > 0 ? var.snmp_auth_password_5 : ""
-      auth_type = length(compact([snmp_users.value.auth_type])
-      ) > 0 ? snmp_users.value.auth_type : "SHA"
-      name = snmp_users.value.user
+      auth_type = snmp_users.value.auth_type
+      name      = snmp_users.value.user
       privacy_password = length(
         regexall("1", coalesce(snmp_users.value.privacy_password, 10))
         ) > 0 ? var.snmp_privacy_password_1 : length(
@@ -162,10 +152,8 @@ resource "intersight_snmp_policy" "snmp" {
         ) > 0 ? var.snmp_privacy_password_3 : length(
         regexall("5", coalesce(snmp_users.value.privacy_password, 10))
       ) > 0 ? var.snmp_privacy_password_5 : ""
-      privacy_type = length(compact([snmp_users.value.privacy_type])
-      ) > 0 ? snmp_users.value.privacy_type : "NA"
-      security_level = length(compact([snmp_users.value.security_level])
-      ) > 0 ? snmp_users.value.security_level : "AuthNoPriv"
+      privacy_type   = snmp_users.value.privacy_type
+      security_level = snmp_users.value.security_level
     }
   }
   dynamic "tags" {

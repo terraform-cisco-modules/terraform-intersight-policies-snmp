@@ -1,7 +1,3 @@
-terraform {
-  experiments = [module_variable_optional_attrs]
-}
-
 #____________________________________________________________
 #
 # SNMP Policy Variables Section.
@@ -52,7 +48,7 @@ variable "profiles" {
   type = list(object(
     {
       name        = string
-      object_type = string
+      object_type = optional(string, "server.Profile")
     }
   ))
 }
@@ -200,12 +196,12 @@ variable "snmp_trap_destinations" {
   EOT
   type = list(object(
     {
-      community_string = optional(string)
-      enable           = optional(bool)
+      community_string = optional(string, 0)
+      enable           = optional(bool, true)
       hostname         = string
-      port             = optional(number)
-      user             = optional(string)
-      trap_type        = optional(string)
+      port             = optional(number, 162)
+      user             = optional(string, "")
+      trap_type        = optional(string, "Trap")
     }
   ))
 }
@@ -214,7 +210,7 @@ variable "snmp_users" {
   default     = []
   description = <<-EOT
     List of SNMP Users to Assign to the SNMP Policy.
-    * auth_password: (default is 0) - A number Between 1-5 to denote to use one of the variables snmp_auth_password_[1-5].  Any other number means no authentication password.
+    * auth_password: (default is 1) - A number Between 1-5 to denote to use one of the variables snmp_auth_password_[1-5].  Any other number means no authentication password.
     * Authorization protocol for authenticating the user.  Currently Options are:
       - MD5
       - SHA: (default)
@@ -236,11 +232,11 @@ variable "snmp_users" {
   EOT
   type = list(object(
     {
-      auth_password    = optional(number)
-      auth_type        = optional(string)
-      privacy_password = optional(number)
-      privacy_type     = optional(string)
-      security_level   = optional(string)
+      auth_password    = optional(number, 1)
+      auth_type        = optional(string, "SHA")
+      privacy_password = optional(number, 0)
+      privacy_type     = optional(string, "NA")
+      security_level   = optional(string, "AuthNoPriv")
       user             = string
     }
   ))
