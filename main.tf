@@ -26,7 +26,7 @@ data "intersight_chassis_profile" "profiles" {
 #____________________________________________________________
 
 data "intersight_fabric_switch_profile" "profiles" {
-  for_each = { for v in var.profiles : v => v if length(var.profiles) > 0 }
+  for_each = { for v in local.profiles : v => v if v.object_type == "fabric.SwitchProfile" }
   name     = each.value
 }
 
