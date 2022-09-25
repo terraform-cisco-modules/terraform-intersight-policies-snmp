@@ -9,7 +9,7 @@ Location in GUI:
 
 ### main.tf
 ```hcl
-module "snmp_policy" {
+module "snmp" {
   source  = "terraform-cisco-modules/policies-snmp/intersight"
   version = ">= 1.0.1"
 
@@ -28,6 +28,19 @@ module "snmp_policy" {
       user          = "snmpuser"
     }
   ]
+}
+```
+
+### provider.tf
+```hcl
+terraform {
+  required_providers {
+    intersight = {
+      source  = "CiscoDevNet/intersight"
+      version = ">=1.0.32"
+    }
+  }
+  required_version = ">=1.3.0"
 }
 ```
 
@@ -56,24 +69,6 @@ variable "snmp_auth_password_1" {
   description = "SNMPv3 User Authentication Password."
   sensitive   = true
   type        = string
-}
-```
-
-### versions.tf
-```hcl
-terraform {
-  required_providers {
-    intersight = {
-      source  = "CiscoDevNet/intersight"
-      version = ">=1.0.32"
-    }
-  }
-}
-
-provider "intersight" {
-  apikey    = var.apikey
-  endpoint  = var.endpoint
-  secretkey = var.secretkey
 }
 ```
 

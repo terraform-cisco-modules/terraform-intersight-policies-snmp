@@ -1,4 +1,4 @@
-module "snmp_policy" {
+module "snmp" {
   source  = "terraform-cisco-modules/policies-snmp/intersight"
   version = ">= 1.0.1"
 
