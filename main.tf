@@ -76,7 +76,17 @@ resource "intersight_snmp_policy" "snmp" {
     data.intersight_server_profile_template.templates,
     data.intersight_organization_organization.org_moid
   ]
-  access_community_string = var.access_community_string
+  access_community_string = length(
+    regexall("1", var.access_community_string)
+    ) > 0 ? var.access_community_string_1 : length(
+    regexall("2", var.access_community_string)
+    ) > 0 ? var.access_community_string_2 : length(
+    regexall("3", var.access_community_string)
+    ) > 0 ? var.access_community_string_3 : length(
+    regexall("4", var.access_community_string)
+    ) > 0 ? var.access_community_string_3 : length(
+    regexall("5", var.access_community_string)
+  ) > 0 ? var.access_community_string_5 : ""
   community_access        = var.snmp_community_access
   description             = var.description != "" ? var.description : "${var.name} SNMP Policy."
   enabled                 = var.enable_snmp

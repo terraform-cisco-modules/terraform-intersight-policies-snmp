@@ -4,6 +4,41 @@
 #____________________________________________________________
 
 variable "access_community_string" {
+  default     = 0
+  description = "The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long."
+  sensitive   = true
+  type        = number
+}
+
+variable "access_community_string_1" {
+  default     = ""
+  description = "The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long."
+  sensitive   = true
+  type        = string
+}
+
+variable "access_community_string_2" {
+  default     = ""
+  description = "The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long."
+  sensitive   = true
+  type        = string
+}
+
+variable "access_community_string_3" {
+  default     = ""
+  description = "The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long."
+  sensitive   = true
+  type        = string
+}
+
+variable "access_community_string_4" {
+  default     = ""
+  description = "The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long."
+  sensitive   = true
+  type        = string
+}
+
+variable "access_community_string_5" {
   default     = ""
   description = "The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long."
   sensitive   = true
