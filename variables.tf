@@ -51,9 +51,21 @@ variable "description" {
   type        = string
 }
 
+variable "domain_profiles" {
+  default     = {}
+  description = "Map for Moid based Domain Profile Sources."
+  type        = any
+}
+
 variable "enable_snmp" {
   default     = true
   description = "State of the SNMP Policy on the endpoint. If enabled, the endpoint sends SNMP traps to the designated host."
+  type        = bool
+}
+
+variable "moids" {
+  default     = false
+  description = "Flag to Determine if pools and policies should be data sources or if they already defined as a moid."
   type        = bool
 }
 

@@ -6,9 +6,7 @@
 
 data "intersight_organization_organization" "org_moid" {
   for_each = {
-    for v in [var.organization] : v => v if length(
-      regexall("[[:xdigit:]]{24}", var.organization)
-    ) == 0
+    for v in [var.organization] : v => v if var.moids == false
   }
   name = each.value
 }
@@ -32,9 +30,7 @@ data "intersight_chassis_profile" "profiles" {
 
 data "intersight_fabric_switch_profile" "profiles" {
   for_each = {
-    for v in var.profiles : v.name => v if v.object_type == "fabric.SwitchProfile" && length(
-      regexall("[[:xdigit:]]{24}", v.name)
-    ) == 0
+    for v in var.profiles : v.name => v if v.object_type == "fabric.SwitchProfile" && var.moids == false
   }
   name = each.value.name
 }
@@ -87,15 +83,15 @@ resource "intersight_snmp_policy" "snmp" {
     ) > 0 ? var.access_community_string_3 : length(
     regexall("5", var.access_community_string)
   ) > 0 ? var.access_community_string_5 : ""
-  community_access        = var.snmp_community_access
-  description             = var.description != "" ? var.description : "${var.name} SNMP Policy."
-  enabled                 = var.enable_snmp
-  engine_id               = var.snmp_engine_input_id
-  name                    = var.name
-  snmp_port               = var.snmp_port
-  sys_contact             = var.system_contact
-  sys_location            = var.system_location
-  trap_community          = var.trap_community_string
+  community_access = var.snmp_community_access
+  description      = var.description != "" ? var.description : "${var.name} SNMP Policy."
+  enabled          = var.enable_snmp
+  engine_id        = var.snmp_engine_input_id
+  name             = var.name
+  snmp_port        = var.snmp_port
+  sys_contact      = var.system_contact
+  sys_location     = var.system_location
+  trap_community   = var.trap_community_string
   v2_enabled = length(compact([var.access_community_string])
     ) > 0 || length(compact([var.trap_community_string])
     ) > 0 || length(compact([var.snmp_trap_community_1])
@@ -106,8 +102,7 @@ resource "intersight_snmp_policy" "snmp" {
   ) > 0 ? true : false
   v3_enabled = length(var.snmp_users) > 0 ? true : false
   organization {
-    moid = length(
-      regexall("[[:xdigit:]]{24}", var.organization)
+    moid = length(regexall(true, var.moids)
       ) > 0 ? var.organization : data.intersight_organization_organization.org_moid[
       var.organization].results[0
     ].moid
@@ -119,9 +114,8 @@ resource "intersight_snmp_policy" "snmp" {
       moid = length(regexall("chassis.Profile", profiles.value.object_type)
         ) > 0 ? data.intersight_chassis_profile.profiles[profiles.value.name].results[0
         ].moid : length(regexall("fabric.SwitchProfile", profiles.value.object_type)
-        ) > 0 ? length(
-        regexall("[[:xdigit:]]{24}", profiles.value.name)
-        ) > 0 ? profiles.value.name : data.intersight_fabric_switch_profile.profiles[profiles.value.name].results[0
+        ) > 0 ? length(regexall(true, var.moids)) > 0 ? var.domain_profiles[profiles.value.name
+        ].moid : data.intersight_fabric_switch_profile.profiles[profiles.value.name].results[0
         ].moid : length(regexall("server.ProfileTemplate", profiles.value.object_type)
         ) > 0 ? data.intersight_server_profile_template.templates[profiles.value.name].results[0
       ].moid : data.intersight_server_profile.profiles[profiles.value.name].results[0].moid
