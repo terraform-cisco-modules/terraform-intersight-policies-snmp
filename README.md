@@ -104,7 +104,7 @@ export TF_VAR_snmp_auth_password_1=`cat <your-auth-password>`
 ```bash
 $env:TF_VAR_apikey="<your-api-key>"
 $env:TF_VAR_secretkey="<secret-key-file-location>""
-$env:TF_VAR_snmp_auth_password_1="<your-auth-password>""
+$env:TF_VAR_snmp_auth_password_1="<your-auth-password>"
 ```
 
 
