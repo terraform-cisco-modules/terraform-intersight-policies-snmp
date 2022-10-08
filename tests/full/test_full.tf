@@ -1,51 +1,24 @@
-terraform {
-  required_providers {
-    test = {
-      source = "terraform.io/builtin/test"
-    }
-
-    intersight = {
-      source  = "CiscoDevNet/intersight"
-      version = ">=1.0.32"
-    }
-  }
-}
-
 module "main" {
-  source           = "../.."
-  assignment_order = "sequential"
-  description      = "Demo WWPN Pool"
-  id_blocks = [
+  source               = "../.."
+  description          = "${var.name} SNMP Policy."
+  name                 = var.name
+  organization         = "terratest"
+  snmp_auth_password_1 = var.snmp_auth_password_1
+  snmp_trap_destinations = [
     {
-      from = "0:00:00:25:B5:00:00:00"
-      size = 1000
+      hostname = "198.18.1.62"
+      user     = "snmpuser"
     }
   ]
-  name         = "default"
-  organization = "default"
-  pool_purpose = "WWPN"
-}
-
-data "intersight_fcpool_pool" "wwpn_pool" {
-  depends_on = [
-    module.main
+  snmp_users = [
+    {
+      auth_password = 1
+      user          = "snmpuser"
+    }
   ]
-  name = "default"
 }
 
-resource "test_assertions" "wwpn_pool" {
-  component = "wwpn_pool"
-
-  # equal "description" {
-  #   description = "description"
-  #   got         = data.intersight_fcpool_pool.wwpn_pool.description
-  #   want        = "Demo WWPN Pool"
-  # }
-  # 
-  # equal "name" {
-  #   description = "name"
-  #   got         = data.intersight_fcpool_pool.wwpn_pool.name
-  #   want        = "default"
-  # }
-
+variable "snmp_auth_password_1" {
+  sensitive = true
+  type      = string
 }

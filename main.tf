@@ -92,8 +92,7 @@ resource "intersight_snmp_policy" "snmp" {
   sys_contact      = var.system_contact
   sys_location     = var.system_location
   trap_community   = var.trap_community_string
-  v2_enabled = length(compact([var.access_community_string])
-    ) > 0 || length(compact([var.trap_community_string])
+  v2_enabled = length(compact([var.trap_community_string])
     ) > 0 || length(compact([var.snmp_trap_community_1])
     ) > 0 || length(compact([var.snmp_trap_community_2])
     ) > 0 || length(compact([var.snmp_trap_community_3])

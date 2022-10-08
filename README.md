@@ -1,9 +1,17 @@
 <!-- BEGIN_TF_DOCS -->
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Developed by: Cisco](https://img.shields.io/badge/Developed%20by-Cisco-blue)](https://developer.cisco.com)
+[![Tests](https://github.com/terraform-cisco-modules/terraform-intersight-policies-snmp/actions/workflows/terratest.yml/badge.svg)](https://github.com/terraform-cisco-modules/terraform-intersight-policies-snmp/actions/workflows/terratest.yml)
+
 # Terraform Intersight Policies - SNMP
 Manages Intersight SNMP Policies
 
 Location in GUI:
 `Policies` » `Create Policy` » `SNMP`
+
+## Easy IMM
+
+[*Easy IMM - Comprehensive Example*](https://github.com/terraform-cisco-modules/easy-imm-comprehensive-example) - A comprehensive example for policies, pools, and profiles.
 
 ## Example
 
@@ -18,7 +26,7 @@ module "snmp" {
   organization = "default"
   snmp_trap_destinations = [
     {
-      hostname = "198.18.1.31"
+      hostname = "198.18.1.62"
       user     = "snmpuser"
     }
   ]
@@ -46,7 +54,7 @@ terraform {
 provider "intersight" {
   apikey    = var.apikey
   endpoint  = var.endpoint
-  secretkey = var.secretkey
+  secretkey = fileexists(var.secretkeyfile) ? file(var.secretkeyfile) : var.secretkey
 }
 ```
 
@@ -65,14 +73,15 @@ variable "endpoint" {
 }
 
 variable "secretkey" {
-  description = "Intersight Secret Key."
+  default     = ""
+  description = "Intersight Secret Key Content."
   sensitive   = true
   type        = string
 }
 
-variable "snmp_auth_password_1" {
-  default     = ""
-  description = "SNMPv3 User Authentication Password."
+variable "secretkeyfile" {
+  default     = "blah.txt"
+  description = "Intersight Secret Key File Location."
   sensitive   = true
   type        = string
 }
@@ -80,33 +89,15 @@ variable "snmp_auth_password_1" {
 
 ## Environment Variables
 
-It is not supported to include sensitive variables in maps or lists.  snmp_traps and snmp_users are lists of object.  So we assign the passwords as a numerical value in the list of object and then that references the variable that has been set as sensitive.  This way the values can be protected in the state file.
-
-Thus, The SNMP Module may require more Sensitive Variables because SNMP Policies include community strings and authorization and privilege passwords.  In our example the only sensitive value is the auth_password, which was set to `1`.
-
-If we were to use communities or privilege passwords we would need to add variables for these as well.
-
-Each type of these sensitive variables, shown in the table below, can have up to five variables: snmp_auth_password_[1-5], snmp_privacy_password_[1-5], and snmp_trap_community_[1-5]. Add them according to your need.
-
 ### Terraform Cloud/Enterprise - Workspace Variables
-- Add variable apikey with value of [your-api-key]
-- Add variable secretkey with value of [your-secret-file-content]
-- Add variable snmp_auth_password_1 with value of [your-auth-password]
+- Add variable apikey with the value of [your-api-key]
+- Add variable secretkey with the value of [your-secret-file-content]
 
-### Linux
+### Linux and Windows
 ```bash
 export TF_VAR_apikey="<your-api-key>"
-export TF_VAR_secretkey=`cat <secret-key-file-location>`
-export TF_VAR_snmp_auth_password_1=`cat <your-auth-password>`
+export TF_VAR_secretkeyfile="<secret-key-file-location>"
 ```
-
-### Windows
-```bash
-$env:TF_VAR_apikey="<your-api-key>"
-$env:TF_VAR_secretkey="<secret-key-file-location>""
-$env:TF_VAR_snmp_auth_password_1="<your-auth-password>"
-```
-
 
 ## Requirements
 
@@ -118,14 +109,11 @@ $env:TF_VAR_snmp_auth_password_1="<your-auth-password>"
 
 | Name | Version |
 |------|---------|
-| <a name="provider_intersight"></a> [intersight](#provider\_intersight) | 1.0.32 |
+| <a name="provider_intersight"></a> [intersight](#provider\_intersight) | >=1.0.32 |
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_apikey"></a> [apikey](#input\_apikey) | Intersight API Key. | `string` | n/a | yes |
-| <a name="input_endpoint"></a> [endpoint](#input\_endpoint) | Intersight URL. | `string` | `"https://intersight.com"` | no |
-| <a name="input_secretkey"></a> [secretkey](#input\_secretkey) | Intersight Secret Key. | `string` | n/a | yes |
 | <a name="input_access_community_string"></a> [access\_community\_string](#input\_access\_community\_string) | The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long. | `number` | `0` | no |
 | <a name="input_access_community_string_1"></a> [access\_community\_string\_1](#input\_access\_community\_string\_1) | The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long. | `string` | `""` | no |
 | <a name="input_access_community_string_2"></a> [access\_community\_string\_2](#input\_access\_community\_string\_2) | The default SNMPv1, SNMPv2c community name or SNMPv3 username to include on any trap messages sent to the SNMP host. The name can be 18 characters long. | `string` | `""` | no |

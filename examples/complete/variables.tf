@@ -11,14 +11,15 @@ variable "endpoint" {
 }
 
 variable "secretkey" {
-  description = "Intersight Secret Key."
+  default     = ""
+  description = "Intersight Secret Key Content."
   sensitive   = true
   type        = string
 }
 
-variable "snmp_auth_password_1" {
-  default     = ""
-  description = "SNMPv3 User Authentication Password."
+variable "secretkeyfile" {
+  default     = "blah.txt"
+  description = "Intersight Secret Key File Location."
   sensitive   = true
   type        = string
 }

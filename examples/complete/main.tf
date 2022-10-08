@@ -7,7 +7,7 @@ module "snmp" {
   organization = "default"
   snmp_trap_destinations = [
     {
-      hostname = "198.18.1.31"
+      hostname = "198.18.1.62"
       user     = "snmpuser"
     }
   ]
